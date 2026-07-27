@@ -1,18 +1,3 @@
----
-title: Continuum 3D
-emoji: 🔧
-colorFrom: blue
-colorTo: slate
-sdk: gradio
-sdk_version: 5.12.0
-app_file: app.py
-pinned: true
-license: mit
-header: mini
----
-
-<div align="center">
-
 # Continuum 3D
 
 **Open-source, zero-storage interactive 3D engineering workspace and generative CAD studio.**
