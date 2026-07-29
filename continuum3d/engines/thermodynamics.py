@@ -7,17 +7,17 @@ from continuum3d.utils.plotly_utils import dark_layout
 from continuum3d.config import R, STD_PRESSURE, THERMO_STEPS
 
 
-def carnot_cycle(th_high: float, th_low: float):
+def carnot_cycle(th_high: float, th_low: float, moles: float = 1.0,
+                 exp_ratio: float = 1.8, gamma: float = 7 / 5):
     """Full Carnot cycle PV diagram with efficiency, work, and heat."""
     TH = th_high + 273.15
     TL = th_low + 273.15
     eta = 1 - TL / TH
-    n = 1.0
+    n = moles
     P1 = STD_PRESSURE
     V1 = n * R * TH / P1
-    V2 = V1 * 1.8
+    V2 = V1 * exp_ratio
     P2 = n * R * TH / V2
-    gamma = 7 / 5
     V3 = V2 * (TH / TL) ** (1 / (gamma - 1))
     V4 = V1 * V3 / V2
     P4 = n * R * TL / V4

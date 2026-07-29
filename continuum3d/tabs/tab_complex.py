@@ -16,6 +16,13 @@ def build_tab():
             with gr.Group() as c_carnot:
                 c_th = gr.Slider(50, 1000, value=500, step=10, label="Hot Reservoir (\u00b0C)")
                 c_tl = gr.Slider(-50, 200, value=50, step=5, label="Cold Reservoir (\u00b0C)")
+                c_moles = gr.Slider(0.1, 10, value=1.0, step=0.1, label="Moles of Gas")
+                c_ratio = gr.Slider(1.1, 5, value=1.8, step=0.1, label="Expansion Ratio")
+                c_gamma = gr.Dropdown(
+                    [("Monatomic (5/3=1.667)", 1.667),
+                     ("Diatomic (7/5=1.4)", 1.4),
+                     ("Polyatomic (9/7=1.286)", 1.286)],
+                    value=1.4, label="Heat Capacity Ratio (\u03b3)")
 
             with gr.Group(visible=False) as c_bern:
                 c_rho = gr.Slider(100, 2000, value=1000, step=10, label="Density (kg/m\u00b3)")
@@ -42,22 +49,21 @@ def build_tab():
 
     c_mode.change(_switch, [c_mode], [c_carnot, c_bern, c_gas])
 
-    def _run(mode, th, tl, rho, bv, bh1, bp, bh2, gp, gv, gt):
+    c_all = [c_mode, c_th, c_tl, c_moles, c_ratio, c_gamma,
+             c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt]
+
+    def _run(mode, th, tl, moles, ratio, gamma,
+             rho, bv, bh1, bp, bh2, gp, gv, gt):
         if mode == "Carnot Cycle":
-            return carnot_cycle(th, tl)
+            return carnot_cycle(th, tl, moles, ratio, gamma)
         elif mode == "Bernoulli's Equation":
             return bernoulli_calc(rho, bv, bh1, bp, bh2)
         return ideal_gas_calc(gp, gv, gt)
 
-    c_btn.click(_run,
-                [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
-                [c_plot, c_formula])
-    c_mode.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
-                  [c_plot, c_formula])
-    c_th.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
-                [c_plot, c_formula])
-    c_tl.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
-                [c_plot, c_formula])
+    c_btn.click(_run, c_all, [c_plot, c_formula])
+    for widget in c_all:
+        widget.change(_run, c_all, [c_plot, c_formula])
+
     c_aibtn.click(
         lambda f: groq_query(f"Explain the thermodynamic principles: {f}",
                              "You are a thermodynamics professor."),
