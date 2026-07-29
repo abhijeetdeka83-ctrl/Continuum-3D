@@ -5,6 +5,7 @@ from continuum3d.utils.units import UNIT_TABLES
 from continuum3d.tabs import (
     tab_general, tab_traditional, tab_advanced,
     tab_adaptive, tab_complex, tab_futuristic, tab_sandbox,
+    tab_thermal,
 )
 
 
@@ -58,6 +59,8 @@ def build_app() -> gr.Blocks:
                 tab_complex.build_tab()
             with gr.Tab("Futuristic"):
                 tab_futuristic.build_tab()
+            with gr.Tab("Thermal & Electrical"):
+                tab_thermal.build_tab()
             with gr.Tab("Custom 3D Sandbox"):
                 tab_sandbox.build_tab()
 
