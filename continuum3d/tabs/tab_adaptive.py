@@ -50,3 +50,33 @@ def build_tab():
                  [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
                   ad_ftype, ad_fmax, ad_fnum],
                  [ad_plot, ad_3d, ad_file, ad_info])
+    ad_mode.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                          ad_ftype, ad_fmax, ad_fnum],
+                   [ad_plot, ad_3d, ad_file, ad_info])
+    ad_ltype.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                           ad_ftype, ad_fmax, ad_fnum],
+                    [ad_plot, ad_3d, ad_file, ad_info])
+    ad_cell.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                          ad_ftype, ad_fmax, ad_fnum],
+                   [ad_plot, ad_3d, ad_file, ad_info])
+    ad_nx.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                        ad_ftype, ad_fmax, ad_fnum],
+                 [ad_plot, ad_3d, ad_file, ad_info])
+    ad_ny.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                        ad_ftype, ad_fmax, ad_fnum],
+                 [ad_plot, ad_3d, ad_file, ad_info])
+    ad_nz.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                        ad_ftype, ad_fmax, ad_fnum],
+                 [ad_plot, ad_3d, ad_file, ad_info])
+    ad_strut.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                           ad_ftype, ad_fmax, ad_fnum],
+                    [ad_plot, ad_3d, ad_file, ad_info])
+    ad_ftype.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                           ad_ftype, ad_fmax, ad_fnum],
+                    [ad_plot, ad_3d, ad_file, ad_info])
+    ad_fmax.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                          ad_ftype, ad_fmax, ad_fnum],
+                   [ad_plot, ad_3d, ad_file, ad_info])
+    ad_fnum.change(_run, [ad_mode, ad_ltype, ad_cell, ad_nx, ad_ny, ad_nz, ad_strut,
+                          ad_ftype, ad_fmax, ad_fnum],
+                   [ad_plot, ad_3d, ad_file, ad_info])

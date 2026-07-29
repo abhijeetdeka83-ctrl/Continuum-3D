@@ -45,6 +45,12 @@ def build_tab():
         return wormhole_calc(wr, wt)
 
     f_btn.click(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_mode.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_bhm.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_rv.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_rm.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_wr.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
+    f_wt.change(_run, [f_mode, f_bhm, f_rv, f_rm, f_wr, f_wt], [f_plot, f_formula])
     f_aibtn.click(
         lambda f: groq_query(f"Deep physics explanation: {f}",
                              "You are a theoretical physicist."),

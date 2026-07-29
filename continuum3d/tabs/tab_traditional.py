@@ -57,6 +57,45 @@ def build_tab():
                 [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
                  t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
                 [t_plot, t_formula])
+    t_mode.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                         t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                  [t_plot, t_formula])
+    t_btype.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                          t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                   [t_plot, t_formula])
+    t_blen.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                         t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                  [t_plot, t_formula])
+    t_bload.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                          t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                   [t_plot, t_formula])
+    t_bei.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                        t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                 [t_plot, t_formula])
+    t_bpos.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                         t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                  [t_plot, t_formula])
+    t_sy.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_sa.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_sl.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_sf.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_hd.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_hr.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
+    t_ha.change(_run, [t_mode, t_btype, t_blen, t_bload, t_bei, t_bpos,
+                       t_sy, t_sa, t_sl, t_sf, t_hd, t_hr, t_ha],
+                [t_plot, t_formula])
     t_aibtn.click(
         lambda f: groq_query(f"Provide detailed engineering analysis: {f}",
                              "You are a senior mechanical engineer."),

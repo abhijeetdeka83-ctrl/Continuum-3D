@@ -1,16 +1,25 @@
-"""Tab 7: Custom 3D Sandbox — Parametric, Text-to-3D, STL Export."""
+"""Tab 7: Custom 3D Sandbox — Parametric, Text-to-3D, Multi-Format Export."""
 import gradio as gr
 from continuum3d.mesh.shapes import generate_shape
 from continuum3d.mesh.blueprint import process_blueprint
 from continuum3d.utils.groq_client import groq_query
+from continuum3d.utils.mesh_utils import EXPORT_FORMATS, create_ephemeral_file
+import trimesh
 
 
 def build_tab():
-    gr.Markdown("### Text-to-3D | Parametric Shapes | Blueprint STL Generator")
+    gr.Markdown("### Text-to-3D | Parametric Shapes | Multi-Format Export")
     with gr.Row():
         with gr.Column(scale=6):
             s_3d = gr.Model3D(label="3D Viewport", height=520)
-            s_file = gr.File(label="Download STL")
+            with gr.Row():
+                s_file = gr.File(label="Download Model")
+            s_export_fmt = gr.Dropdown(
+                choices=list(EXPORT_FORMATS.keys()),
+                value="STL",
+                label="Export Format",
+            )
+            s_export_btn = gr.Button("Export Selected Format", size="sm")
         with gr.Column(scale=4):
             s_mode = gr.Radio(["Parametric Shape", "Text to 3D", "Image to 3D"],
                               value="Parametric Shape", label="Mode")
@@ -46,14 +55,31 @@ def build_tab():
 
     s_mode.change(_switch, [s_mode], [s_param, s_text, s_img])
 
+    _last_mesh = {"mesh": None}
+
     def _run(mode, shape, sx, sy, sz, sub, prompt, image):
         if mode == "Parametric Shape":
-            return generate_shape(shape, sx, sy, sz, int(sub))
-        return process_blueprint(prompt, image, mode)
+            glb, stl, info = generate_shape(shape, sx, sy, sz, int(sub))
+        else:
+            glb, stl, info = process_blueprint(prompt, image, mode)
+        if glb:
+            try:
+                _last_mesh["mesh"] = trimesh.load(glb)
+            except Exception:
+                _last_mesh["mesh"] = None
+        return glb, stl, info
 
     s_btn.click(_run,
                 [s_mode, s_shape, s_sx, s_sy, s_sz, s_sub, s_prompt, s_image],
                 [s_3d, s_file, s_info])
+
+    def _export_as(fmt):
+        if _last_mesh["mesh"] is None:
+            return None
+        return create_ephemeral_file(_last_mesh["mesh"], fmt)
+
+    s_export_btn.click(_export_as, [s_export_fmt], [s_file])
+
     s_aibtn.click(
         lambda info: groq_query(
             f"Suggest improvements or variations for this 3D model: {info}",

@@ -59,6 +59,31 @@ def create_strut(p1, p2, radius: float) -> Optional[trimesh.Trimesh]:
     return cylinder
 
 
+EXPORT_FORMATS = {
+    "STL": ".stl",
+    "OBJ": ".obj",
+    "PLY": ".ply",
+    "3MF": ".3mf",
+    "GLB": ".glb",
+    "COLLADA": ".dae",
+    "OFF": ".off",
+}
+
+
+def create_ephemeral_file(mesh: trimesh.Trimesh, fmt: str) -> Optional[str]:
+    """Create a temporary file in the specified format. Returns path or None."""
+    ext = EXPORT_FORMATS.get(fmt, ".stl")
+    try:
+        trimesh.repair.fill_holes(mesh)
+        trimesh.repair.fix_normals(mesh)
+        tmp = tempfile.NamedTemporaryFile(suffix=ext, delete=False, dir=tempfile.gettempdir())
+        mesh.export(tmp.name, file_type=ext.lstrip("."))
+        tmp.close()
+        return tmp.name
+    except Exception:
+        return None
+
+
 def repair_and_export(mesh: trimesh.Trimesh):
     """Repair mesh and return both GLB and STL ephemeral paths."""
     trimesh.repair.fill_holes(mesh)

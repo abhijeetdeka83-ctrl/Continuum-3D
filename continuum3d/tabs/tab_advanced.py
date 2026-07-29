@@ -54,6 +54,32 @@ def build_tab():
     a_btn.click(_run,
                 [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
                 [a_plot, a_formula])
+    a_mode.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                  [a_plot, a_formula])
+    a_v0.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_ang.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                 [a_plot, a_formula])
+    a_g.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+               [a_plot, a_formula])
+    a_drag.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                  [a_plot, a_formula])
+    a_h0.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_om.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_or.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_oa.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_l1.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_l2.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_t1.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
+    a_t2.change(_run, [a_mode, a_v0, a_ang, a_g, a_drag, a_h0, a_om, a_or, a_oa, a_l1, a_l2, a_t1, a_t2],
+                [a_plot, a_formula])
     a_aibtn.click(
         lambda f: groq_query(f"Explain this aerospace/robotics analysis: {f}",
                              "You are an aerospace engineering professor."),

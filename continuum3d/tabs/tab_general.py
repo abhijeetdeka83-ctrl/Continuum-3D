@@ -45,6 +45,11 @@ def build_tab():
         return energy_calculator(m, h, v)
 
     g_pbtn.click(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
+    g_pmode.change(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
+    g_mass.change(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
+    g_accel.change(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
+    g_height.change(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
+    g_vel.change(_run, [g_pmode, g_mass, g_accel, g_height, g_vel], [g_plot, g_formula])
     g_aibtn.click(
         lambda f: groq_query(f"Explain this physics in detail: {f}",
                              "You are a physics professor. Be clear and thorough."),

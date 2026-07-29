@@ -52,6 +52,12 @@ def build_tab():
     c_btn.click(_run,
                 [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
                 [c_plot, c_formula])
+    c_mode.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
+                  [c_plot, c_formula])
+    c_th.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
+                [c_plot, c_formula])
+    c_tl.change(_run, [c_mode, c_th, c_tl, c_rho, c_bv, c_bh1, c_bp, c_bh2, c_gp, c_gv, c_gt],
+                [c_plot, c_formula])
     c_aibtn.click(
         lambda f: groq_query(f"Explain the thermodynamic principles: {f}",
                              "You are a thermodynamics professor."),
