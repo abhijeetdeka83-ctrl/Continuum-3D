@@ -1,10 +1,45 @@
 """Configuration constants and environment variables."""
 import os
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+# --- App Configuration ---
 APP_TITLE = "Continuum 3D"
 APP_DESC = "Zero-Storage Interactive 3D Engineering Workspace & Generative CAD Studio"
+SERVER_NAME = os.environ.get("SERVER_HOST", "0.0.0.0")
+SERVER_PORT = int(os.environ.get("SERVER_PORT", "7860"))
+GRADIO_SHARE = os.environ.get("GRADIO_SHARE", "False").lower() == "true"
+
+# --- Groq AI ---
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_TEMPERATURE = float(os.environ.get("GROQ_TEMPERATURE", "0.7"))
+GROQ_MAX_TOKENS = int(os.environ.get("GROQ_MAX_TOKENS", "1024"))
+
+# --- Physics Constants ---
+G = 6.674e-11
+C = 3e8
+SOLAR_MASS = 1.989e30
+R = 8.314
+STD_PRESSURE = 101325.0
+STD_TEMP = 298.15
+
+# --- Default Plot Dimensions ---
+PLOT_HEIGHT_STANDARD = 400
+PLOT_HEIGHT_MEDIUM = 450
+PLOT_HEIGHT_LARGE = 500
+
+# --- Simulation Defaults ---
+PROJECTILE_DT = 0.005
+PROJECTILE_MAX_STEPS = 2000
+STRESS_STRAIN_POINTS = 300
+STRAIN_RANGE = 0.25
+YIELD_STRAIN = 0.002
+BEAM_SAMPLES = 300
+THERMO_STEPS = 200
+
+# --- Theme ---
+PRIMARY_HUE = os.environ.get("THEME_HUE", "blue")
+SECONDARY_HUE = os.environ.get("THEME_SECONDARY", "slate")
+NEUTRAL_HUE = os.environ.get("THEME_NEUTRAL", "zinc")
 
 CSS = """
 .status-bar {

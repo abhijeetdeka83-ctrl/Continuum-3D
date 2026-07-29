@@ -4,6 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from continuum3d.utils.plotly_utils import dark_layout
+from continuum3d.config import R, STD_PRESSURE, THERMO_STEPS
 
 
 def carnot_cycle(th_high: float, th_low: float):
@@ -11,9 +12,8 @@ def carnot_cycle(th_high: float, th_low: float):
     TH = th_high + 273.15
     TL = th_low + 273.15
     eta = 1 - TL / TH
-    R = 8.314
     n = 1.0
-    P1 = 101325.0
+    P1 = STD_PRESSURE
     V1 = n * R * TH / P1
     V2 = V1 * 1.8
     P2 = n * R * TH / V2
@@ -22,7 +22,7 @@ def carnot_cycle(th_high: float, th_low: float):
     V4 = V1 * V3 / V2
     P4 = n * R * TL / V4
 
-    steps = 200
+    steps = THERMO_STEPS
 
     def isotherm(Va, Vb, T):
         v = np.linspace(Va, Vb, steps)

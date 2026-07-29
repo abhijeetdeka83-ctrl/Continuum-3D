@@ -3,13 +3,13 @@ import math
 import numpy as np
 import plotly.graph_objects as go
 from continuum3d.utils.plotly_utils import dark_layout
+from continuum3d.config import G, C, SOLAR_MASS
 
 
 def schwarzschild_calc(mass_solar: float):
     """Schwarzschild radius, Hawking temperature, time dilation."""
-    G, c = 6.674e-11, 3e8
-    M = mass_solar * 1.989e30
-    rs = 2 * G * M / c ** 2
+    M = mass_solar * SOLAR_MASS
+    rs = 2 * G * M / C ** 2
     area = 4 * math.pi * rs ** 2
     T_hawk = 1.227e23 / M
 

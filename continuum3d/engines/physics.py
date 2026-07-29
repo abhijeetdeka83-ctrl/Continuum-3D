@@ -4,6 +4,8 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from continuum3d.utils.plotly_utils import dark_layout
+from continuum3d.config import (PROJECTILE_DT, PROJECTILE_MAX_STEPS,
+                                STRESS_STRAIN_POINTS, STRAIN_RANGE, YIELD_STRAIN, G)
 
 
 def newtons_second_law(mass: float, acceleration: float):
@@ -66,11 +68,11 @@ def projectile_motion(v0: float, angle_deg: float, gravity: float, drag: float, 
     """Full projectile simulation with optional quadratic air resistance."""
     angle = math.radians(angle_deg)
     vx, vy = v0 * math.cos(angle), v0 * math.sin(angle)
-    dt = 0.005
+    dt = PROJECTILE_DT
     xs, ys, ts = [0.0], [h0], [0.0]
     cx, cy, cvx, cvy, ct = 0.0, h0, vx, vy, 0.0
 
-    while cy >= 0 and ct < 2000:
+    while cy >= 0 and ct < PROJECTILE_MAX_STEPS:
         speed = math.sqrt(cvx ** 2 + cvy ** 2)
         cvx += -drag * speed * cvx * dt
         cvy += (-gravity - drag * speed * cvy) * dt
@@ -109,9 +111,9 @@ def projectile_motion(v0: float, angle_deg: float, gravity: float, drag: float, 
 
 def orbital_mechanics(mass_primary: float, body_radius: float, altitude: float):
     """Orbital velocity, period, and escape velocity with orbit visualization."""
-    G = 6.674e-11
+    G_const = G
     r = body_radius + altitude
-    v_orb = math.sqrt(G * mass_primary / r)
+    v_orb = math.sqrt(G_const * mass_primary / r)
     period = 2 * math.pi * r / v_orb
     v_esc = math.sqrt(2) * v_orb
 
@@ -184,8 +186,8 @@ def stress_strain_calc(youngs_pa: float, cross_area: float, orig_length: float, 
     strain = stress / youngs_pa
     elongation = strain * orig_length
 
-    yield_strain = 0.002
-    strains = np.linspace(0, 0.25, 300)
+    yield_strain = YIELD_STRAIN
+    strains = np.linspace(0, STRAIN_RANGE, STRESS_STRAIN_POINTS)
     sigma = np.where(strains <= yield_strain,
                      youngs_pa * strains,
                      youngs_pa * yield_strain * np.exp(-2 * (strains - yield_strain)) + stress * 0.3)

@@ -1,6 +1,6 @@
 """Application layout builder — assembles Gradio Blocks with all tabs."""
 import gradio as gr
-from continuum3d.config import APP_TITLE, CSS, HEADER_HTML
+from continuum3d.config import APP_TITLE, CSS, HEADER_HTML, PRIMARY_HUE, SECONDARY_HUE, NEUTRAL_HUE
 from continuum3d.utils.units import UNIT_TABLES
 from continuum3d.tabs import (
     tab_general, tab_traditional, tab_advanced,
@@ -10,7 +10,7 @@ from continuum3d.tabs import (
 
 def build_theme():
     """Build custom dark-slate Gradio theme."""
-    theme = gr.themes.Slate(primary_hue="blue", secondary_hue="slate", neutral_hue="slate")
+    theme = gr.themes.Slate(primary_hue=PRIMARY_HUE, secondary_hue=SECONDARY_HUE, neutral_hue=NEUTRAL_HUE)
     theme = theme.set(
         body_background_fill="#0f172a",
         body_background_fill_dark="#0f172a",

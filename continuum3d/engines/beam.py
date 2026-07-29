@@ -3,11 +3,12 @@ import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from continuum3d.utils.plotly_utils import dark_layout
+from continuum3d.config import BEAM_SAMPLES
 
 
 def beam_deflection(beam_type: str, length: float, load: float, ei: float, load_pos: float):
     """Beam deflection and bending moment for Simply Supported / Cantilever / Fixed-Fixed."""
-    x = np.linspace(0, length, 300)
+    x = np.linspace(0, length, BEAM_SAMPLES)
     a = load_pos * length
     b = length - a
 

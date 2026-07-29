@@ -1,5 +1,6 @@
 """Groq API client with fail-safe error handling."""
-from continuum3d.config import GROQ_MODEL, GROQ_API_KEY
+from continuum3d.config import (GROQ_MODEL, GROQ_API_KEY,
+                                GROQ_TEMPERATURE, GROQ_MAX_TOKENS)
 
 try:
     import groq as groq_lib
@@ -46,8 +47,8 @@ def groq_query(prompt: str, system_msg: str = "You are an expert engineer and ph
                 {"role": "system", "content": system_msg},
                 {"role": "user", "content": prompt},
             ],
-            temperature=0.7,
-            max_tokens=1024,
+            temperature=GROQ_TEMPERATURE,
+            max_tokens=GROQ_MAX_TOKENS,
         )
         return response.choices[0].message.content
     except groq_lib.RateLimitError:
