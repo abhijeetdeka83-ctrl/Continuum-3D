@@ -158,6 +158,14 @@ Multi-body composition with editable Dataframe, position/rotation transforms, GL
 - 9 tabs · 25+ physics engines · 8 export formats · 50-step undo
 - 8 parametric shapes · 3 lattice types · Boolean/CAD/Assembly ops
 
+## Development Journey
+
+This project went through several architectural pivots — from an ambitious all-in-one cross-domain engineering suite (3D CAD + PCB + FEA + math), through the harsh realities of zero-cost cloud infrastructure, to the final **stateless, ephemeral-storage design** that makes \$0 hosting possible.
+
+The full technical retrospective — including the original vision, the storage crisis that forced a redesign, the tradeoffs made, current flaws, and what I'd do differently — is documented here:
+
+➡️ **[docs/engineering-retrospective.mdx](docs/engineering-retrospective.mdx)**
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
