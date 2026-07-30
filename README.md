@@ -17,7 +17,7 @@ header: mini
 
 **Open-source, zero-storage interactive 3D engineering workspace and generative CAD studio.**
 
-Built with Gradio 5 · Plotly · trimesh · Groq Llama 3.3 70B · NumPy · SciPy
+Built with Gradio 5 · Plotly · trimesh · Groq Llama 3.3 70B · NumPy
 
 Runs free on [Hugging Face Spaces](https://huggingface.co/spaces) — zero infrastructure cost.
 
@@ -27,154 +27,141 @@ Runs free on [Hugging Face Spaces](https://huggingface.co/spaces) — zero infra
 
 ## What is this?
 
-Continuum 3D is a browser-based engineering tool that combines **deterministic physics calculations** with **AI-powered generative design**. It runs entirely in a Gradio web interface, computes everything in real-time, and writes **nothing to permanent storage** — all 3D mesh files exist only in RAM via Python's `tempfile` module and are purged when the session ends.
-
-You can run structural analysis, thermodynamic cycles, relativistic physics, generate parametric 3D models, and download watertight STL files for 3D printing — all from a single page.
+Continuum 3D is a browser-based engineering tool combining **deterministic physics calculations** with **AI-powered generative design** and **parametric CAD**. It runs entirely in Gradio, computes in real-time, and writes **nothing to permanent storage** — all 3D meshes exist only in RAM via `tempfile`, purged when the session ends.
 
 ## Features
 
 | Category | What it does |
 |----------|-------------|
-| **7 Engineering Tabs** | General, Traditional, Advanced, Adaptive, Complex, Futuristic, Custom 3D Sandbox |
-| **21 Physics Calculators** | Newton's laws, beam deflection, projectile motion, orbital mechanics, robot arm FK, stress-strain, hydraulic pressure, FEA heatmaps, Carnot cycle, Bernoulli, ideal gas, Schwarzschild radius, special relativity, wormhole embeddings |
-| **8 Parametric 3D Shapes** | Cube, Sphere, Cylinder, Cone, Torus, Capsule, Pyramid, Gear — all with mesh repair |
-| **3 Lattice Types** | Cubic, BCC, Octet — for lightweight structural design |
-| **AI Text-to-3D** | Describe a shape in English → Groq generates parametric mesh |
-| **Dual 3D-Print Pipeline** | Visual (prompt → mesh) and Precision (dimensions → OpenSCAD → STL) |
-| **Dual Calculation Engine** | Deterministic (NumPy/SciPy, 0ms) + Dynamic AI (Groq LLM) |
-| **Dark Slate UI** | Tailwind Slate-900 aesthetic, asymmetrical 60/25/15 layout |
-| **Zero Storage** | All meshes use `tempfile` — auto-purged on session end |
-| **STL/GLB Export** | Watertight mesh download with trimesh repair |
+| **9 Engineering Tabs** | General, Traditional, Advanced, Adaptive, Complex, Futuristic, Thermal/Electrical, Custom 3D Sandbox, Assembly |
+| **25+ Physics Calculators** | Newton's laws, beam deflection, stress-strain, hydraulic pressure, projectile motion, orbital mechanics, robot FK, FEA heatmaps, buckling, torsion, vibration, fatigue, Carnot cycle, Bernoulli, ideal gas, heat transfer (conduction/convection/radiation), DC/RLC circuits, PID control, transfer functions, pipe flow, Moody chart, Schwarzschild radius, special relativity, wormholes |
+| **CAD Operations** | Shell/Hollow, Linear/Circular Pattern, Revolve, Loft, Import Mesh, Boolean (Union/Subtract/Intersect) |
+| **Multi-Body Assembly** | Add/remove bodies, position/rotation transforms, editable Dataframe body list |
+| **8 Parametric 3D Shapes** | Cube, Sphere, Cylinder, Cone, Torus, Capsule, Pyramid, Gear |
+| **3 Lattice Types** | Cubic, BCC, Octet for lightweight structural design |
+| **AI Text-to-3D** | Describe a shape → Groq generates parametric mesh |
+| **Undo/Redo** | 50-step mesh history with session save/load |
+| **Multi-Format Export** | STL, OBJ, PLY, 3MF, GLB, COLLADA DAE, OFF + HTML report export |
+| **Dual Calculation Engine** | Deterministic (NumPy, 0ms latency) + Dynamic AI (Groq Llama 3.3 70B) |
+| **Dark Slate UI** | Tailwind Slate-900 aesthetic, configurable theme hues |
+| **Zero Storage** | All files use `tempfile` — auto-purged on session end |
 
 ## Architecture
 
 ```
-app.py                          → 16-line entry point
+app.py                                              — 18-line entry point
 continuum3d/
-├── config.py                   → GROQ_MODEL, GROQ_API_KEY, CSS, HEADER_HTML
+├── config.py                                       → 20+ constants, env vars, theme hues
 ├── ui/
-│   └── layout.py               → build_theme() + build_app() — Gradio Blocks assembler
+│   └── layout.py                                   → build_theme() + build_app() — 9-tab assembler
 ├── utils/
-│   ├── plotly_utils.py         → dark_layout() — consistent dark theme for all figures
-│   ├── groq_client.py          → Groq API client with 6 error handlers
-│   ├── mesh_utils.py           → Ephemeral STL/GLB files, strut creation, mesh repair
-│   └── units.py                → Unit conversion (6 categories) + dropdown sync
+│   ├── plotly_utils.py                             → dark_layout() — consistent dark Plotly theme
+│   ├── groq_client.py                              → Groq API client with 6 error handlers
+│   ├── mesh_utils.py                               → EXPORT_FORMATS dict, create_ephemeral_file()
+│   ├── history.py                                  → MeshHistory (50-step undo/redo, JSON save/load)
+│   ├── report_export.py                            → export_plot_to_html() — standalone engineering reports
+│   └── units.py                                    → Unit conversion (6 categories) + dropdown sync
 ├── engines/
-│   ├── physics.py              → 7 calculators (Newton, energy, projectile, orbital, robot arm, stress, hydraulic)
-│   ├── beam.py                 → 3 beam types (Simply Supported, Cantilever, Fixed-Fixed)
-│   ├── fea.py                  → FEA stress heatmap (4 load types)
-│   ├── thermodynamics.py       → Carnot, Bernoulli, ideal gas
-│   └── futuristic.py           → Schwarzschild, special relativity, wormholes
+│   ├── physics.py                                  → Newton, Energy, Projectile, Orbital, Robot FK, Stress, Hydraulic
+│   ├── beam.py                                     → 3 beam types: Simply Supported, Cantilever, Fixed-Fixed
+│   ├── fea.py                                      → FEA stress heatmaps (4 load cases)
+│   ├── structural.py                               → Column Buckling, Torsion, Beam Bending (SFD/BMD), Stress-Strain, 2D Truss FEA
+│   ├── dynamics.py                                 → SDOF Vibration (FRF/impulse), Fatigue S-N (Miner's rule)
+│   ├── thermodynamics.py                           → Carnot cycle, Bernoulli, Ideal Gas
+│   ├── thermal.py                                  → Fourier Conduction, Newton Convection, Stefan-Boltzmann Radiation
+│   ├── electrical.py                               → DC series/parallel, RLC Bode plots
+│   ├── control.py                                  → PID Step Response, Transfer Function Bode
+│   ├── fluids.py                                   → Darcy-Weisbach Pipe Flow, Moody Chart
+│   ├── futuristic.py                               → Schwarzschild radius, Relativity, Wormholes
+│   ├── cad_ops.py                                  → revolve_profile(), sweep_profile(), loft_profiles()
+│   └── assembly.py                                 → Assembly/AssemblyBody with multi-body transforms
 ├── mesh/
-│   ├── shapes.py               → 8 parametric shapes via trimesh + shapely
-│   ├── lattice.py              → Cubic/BCC/Octet lattice generation
-│   └── blueprint.py            → AI text-to-3D via Groq → parametric mesh
+│   ├── shapes.py                                   → 8 parametric shapes via trimesh + shapely
+│   ├── lattice.py                                  → Cubic/BCC/Octet lattice generation
+│   └── blueprint.py                                → AI text-to-3D via Groq → parametric mesh generation
 └── tabs/
-    ├── tab_general.py          → Tab 1: Unit conversion + Newton's law + Energy
-    ├── tab_traditional.py      → Tab 2: Beams + Stress-strain + Hydraulics
-    ├── tab_advanced.py         → Tab 3: Projectile + Orbital + Robot arm
-    ├── tab_adaptive.py         → Tab 4: Lattices + FEA heatmaps
-    ├── tab_complex.py          → Tab 5: Carnot + Bernoulli + Ideal gas
-    ├── tab_futuristic.py       → Tab 6: Black holes + Relativity + Wormholes
-    └── tab_sandbox.py          → Tab 7: Parametric shapes + Text-to-3D + STL export
+    ├── tab_general.py                              → Tab 1: Unit converter + Newton + Energy
+    ├── tab_traditional.py                          → Tab 2: Beam Deflection + Stress-Strain + Buckling + Torsion + Hydraulics + SFD/BMD + Truss FEA
+    ├── tab_advanced.py                             → Tab 3: Projectile + Orbital + Robot + Vibration + Fatigue
+    ├── tab_adaptive.py                             → Tab 4: Lattices + FEA heatmaps
+    ├── tab_complex.py                              → Tab 5: Carnot + Bernoulli + Gas + PID + Transfer Function + Pipe Flow + Moody
+    ├── tab_futuristic.py                           → Tab 6: Black holes + Relativity + Wormholes
+    ├── tab_thermal.py                              → Tab 7: Conduction + Convection + Radiation + DC + RLC
+    ├── tab_sandbox.py                              → Tab 8: Parametric shapes + Text-to-3D + Boolean + Shell/Pattern + Revolve/Loft + Import + Undo/Redo + Save/Load
+    └── tab_assembly.py                             → Tab 9: Multi-body assembly with transforms
 ```
 
-**Dependency flow** — zero import cycles:
+## Quick Start
 
+### Hugging Face (Recommended)
+
+1. Fork on Hugging Face Spaces
+2. Add `GROQ_API_KEY` as a Space secret
+3. Auto-deploys — all deterministic calcs work without API key
+
+### Local
+
+```bash
+git clone https://github.com/abhijeetdeka83-ctrl/Continuum-3D
+cd Continuum-3D
+pip install -r requirements.txt
+set GROQ_API_KEY=your-key-here  # optional
+python app.py
 ```
-app.py → ui/layout.py → tabs/* → engines/*, mesh/*, utils/*
-```
+
+Open `http://localhost:7860`.
+
+## Tab Reference
+
+### Tab 1 — General
+Unit conversion (Length/Mass/Temperature/Force/Energy/Pressure), Newton's Second Law, Energy Calculator with AI deep-dive.
+
+### Tab 2 — Traditional
+Beam deflection (3 support types), Stress-Strain (Ramberg-Osgood), Column Buckling (Euler/Johnson), Torsion, Hydraulics, Beam Bending (SFD/BMD), 2D Truss FEA.
+
+### Tab 3 — Advanced
+Projectile motion (with drag), Orbital mechanics, Robot arm FK, SDOF Vibration (FRF + impulse), Fatigue S-N (Miner's rule).
+
+### Tab 4 — Adaptive
+Lattice generator (Cubic/BCC/Octet), FEA stress heatmaps (4 load types).
+
+### Tab 5 — Complex
+Carnot cycle PV, Bernoulli, Ideal Gas, PID Step Response, Transfer Function Bode, Darcy-Weisbach Pipe Flow, Moody Chart.
+
+### Tab 6 — Futuristic
+Schwarzschild radius, Hawking temperature, time dilation, Special relativity (Lorentz, length contraction), Morris-Thorne wormholes.
+
+### Tab 7 — Thermal & Electrical
+Fourier conduction, Newton convection, Stefan-Boltzmann radiation, DC circuits, RLC Bode analysis.
+
+### Tab 8 — Custom 3D Sandbox
+8 parametric shapes, AI Text-to-3D, Boolean Ops (Union/Subtract/Intersect), Shell/Hollow, Linear Pattern, Import Mesh, Revolve, Loft. Undo/Redo (50-step), session Save/Load. Multi-format export.
+
+### Tab 9 — Assembly
+Multi-body composition with editable Dataframe, position/rotation transforms, GLB preview, STL/OBJ/PLY/3MF export.
 
 ## Tech Stack
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| Frontend | Gradio 5 | Web UI with reactive components |
-| 3D Rendering | Plotly + WebGL | Real-time 3D viewport, heatmaps, subplots |
-| Mesh Generation | trimesh + shapely | Parametric shapes, lattice structures, mesh repair |
-| AI Engine | Groq API (Llama 3.3 70B) | Text-to-3D, engineering Q&A |
-| Math | NumPy, SciPy, math | Deterministic calculations, interpolation |
-| Hosting | Hugging Face Spaces | Free GPU inference via ZeroGPU |
-| Export | STL, GLB | 3D printing and CAD import |
+| Frontend | Gradio 5 | Web UI with reactive .change() handlers |
+| 3D Rendering | Plotly + WebGL + trimesh | Viewport, heatmaps, subplots |
+| Mesh | trimesh + shapely + scad | Parametric shapes, booleans, repair |
+| AI | Groq API (Llama 3.3 70B) | Text-to-3D, engineering Q&A |
+| Math | NumPy, math | Deterministic calculations |
+| Hosting | Hugging Face Spaces | Free deployment |
+| Export | STL, OBJ, PLY, 3MF, GLB, DAE, OFF + HTML | 3DP, CAD, reporting |
 
-## Setup
+## Stats
 
-### Option 1: Hugging Face Spaces (Recommended)
-
-1. Fork or duplicate this Space on Hugging Face
-2. Add `GROQ_API_KEY` as a Space secret (Settings → Variables and secrets → Secrets)
-   - Get a free key at [console.groq.com](https://console.groq.com)
-3. The app deploys automatically — all calculations work without the API key (AI features will be disabled)
-
-### Option 2: Local
-
-```bash
-git clone https://huggingface.co/spaces/YOUR_USERNAME/continuum-3d
-cd continuum-3d
-pip install -r requirements.txt
-export GROQ_API_KEY="your-key-here"  # optional
-python app.py
-```
-
-Open `http://localhost:7860` in your browser.
-
-## Tab Reference
-
-### Tab 1 — General
-Unit conversion across 6 categories (Length, Mass, Temperature, Force, Energy, Pressure) with live formula display. Newton's Second Law and Energy Calculator with AI-powered deep-dive explanations.
-
-### Tab 2 — Traditional
-Beam deflection for Simply Supported, Cantilever, and Fixed-Fixed beams with bending moment diagrams. Stress-strain calculator with Young's modulus. Hydraulic pressure engine.
-
-### Tab 3 — Advanced
-Projectile motion with air drag visualization. Orbital mechanics (circular and elliptical orbits). Robot arm forward kinematics with 3D visualization.
-
-### Tab 4 — Adaptive
-Lattice structure generator (Cubic, BCC, Octet) with 3D viewport and STL download. FEA-style stress heatmap on rectangular plates (Point, Distributed, Cantilever Tip, Torsion loads).
-
-### Tab 5 — Complex
-Full Carnot cycle PV diagram with efficiency, work, and heat calculations. Bernoulli's equation with velocity/pressure profiles. Ideal gas law with multi-temperature PV isotherms.
-
-### Tab 6 — Futuristic
-Schwarzschild radius, Hawking temperature, and gravitational time dilation. Special relativity (Lorentz factor, length contraction). Morris-Thorne traversable wormhole embedding diagram.
-
-### Tab 7 — Custom 3D Sandbox
-8 parametric shapes with adjustable dimensions. AI text-to-3D generation via Groq. 3D viewport with GLB preview and STL/GLB download for 3D printing.
-
-## Project Structure
-
-```
-continuum-3d/
-├── app.py                      # Entry point (16 lines)
-├── requirements.txt            # 7 dependencies
-├── README.md                   # This file
-└── continuum3d/                # Main package
-    ├── config.py               # Constants and environment
-    ├── ui/                     # Gradio theme and layout
-    ├── utils/                  # Shared helpers
-    ├── engines/                # Deterministic math
-    ├── mesh/                   # 3D mesh generation
-    └── tabs/                   # UI tab modules
-```
-
-**28 source files · 52 functions · 0 import cycles · 0 external storage**
+- **38 source files · 65+ functions · 0 import cycles · 0 external storage**
+- 9 tabs · 25+ physics engines · 8 export formats · 50-step undo
+- 8 parametric shapes · 3 lattice types · Boolean/CAD/Assembly ops
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE).
 
 ## Contributing
 
-Contributions welcome. The codebase is modular — each tab, engine, and mesh generator is an isolated module. Add a new calculator by:
-
-1. Creating a function in the appropriate `engines/` module
-2. Adding a tab in `tabs/` that calls it
-3. Registering the tab in `ui/layout.py`
-
-## Acknowledgments
-
-- [Groq](https://groq.com) for free LLM inference
-- [Hugging Face](https://huggingface.co) for free GPU hosting
-- [Gradio](https://gradio.app) for the web framework
-- [trimesh](https://trimesh.org) for mesh processing
-- [Plotly](https://plotly.com) for 3D visualization
+One function per engine module, one tab module per UI tab, register in `ui/layout.py`. Follow the dependency flow: `tabs/ → engines/, mesh/, utils/`.
