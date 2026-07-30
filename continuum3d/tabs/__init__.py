@@ -7,3 +7,4 @@ from . import tab_complex
 from . import tab_futuristic
 from . import tab_sandbox
 from . import tab_thermal
+from . import tab_assembly
